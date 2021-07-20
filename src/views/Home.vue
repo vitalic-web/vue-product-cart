@@ -1,5 +1,6 @@
 <template>
   <div class="home">
+    {{ preloader }}
     <img alt="Vue logo" src="../assets/logo.png">
     <HelloWorld :msg="message" @msg-updated="onChangeMessage" />
     <button type="button" @click="changeMessage">change Message</button>
@@ -7,6 +8,12 @@
 
     <div v-if="isDesktop" class="desktop">desktop</div>
     <div v-else class="mobile">mobile</div>
+
+    <button type="button" @click="changeUserName">changeUserName</button>
+    <button type="button" @click="getData">getData</button>
+    {{ bar.foo && bar.foo.s }}
+    <li v-for="user in users" :key="user.id">{{ user.name }}</li>
+    <li v-for="post in posts" :key="post.id">{{ post }}</li>
   </div>
 </template>
 
@@ -24,11 +31,22 @@ export default {
       message: 'Привет Vue!',
       viewportW: 0,
       cup: 2,
-      guest: 3
+      guest: 3,
+      arr: [
+        1,
+        2
+      ],
+      users: [],
+      posts: [],
+      preloader: false,
+      bar: {
+        d: 'test'
+      }
     }
   },
   computed: {
-    viewportWidthInPx () {
+    viewportWidthInPx (oldV, newV) {
+      console.log(oldV, newV)
       return `${this.viewportW}px`
     },
     isDesktop () {
@@ -38,6 +56,9 @@ export default {
     allCups () {
       return this.cup * this.guest
     }
+  },
+  created () {
+    this.getData()
   },
   mounted () {
     this.$nextTick(() => {
@@ -55,6 +76,25 @@ export default {
     window.removeEventListener('resize', this.onResize)
   },
   methods: {
+    async getData () {
+      this.preloader = true
+
+      Promise.all([
+        fetch('/static/users.json')
+          .then(response => response.json()),
+        fetch('https://jsonplaceholder.typicode.com/users')
+          .then(response => response.json())
+      ]).then(([posts, users]) => {
+        this.posts = posts
+        this.users = users
+        this.preloader = false
+      })
+    },
+
+    changeUserName () {
+      this.users[0].name = 'John Dou'
+    },
+
     changeMessage (ev) {
       console.log(ev)
       this.message = `${this.message} - ${this.message};`
@@ -65,8 +105,8 @@ export default {
     },
 
     onResize () {
-      console.log('onResize')
       this.viewportW = document.documentElement.clientWidth
+      console.log(this.arr)
     }
   }
 }

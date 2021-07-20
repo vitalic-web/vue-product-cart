@@ -22,3 +22,11 @@ yarn lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+Ч.2
+
+- Получение и обработка данных
+- Введение в Vuex
+- Модули Vuex
+- Введение в Vue Router
+- Совместное использование Vue, Vuex и Vue Router в приложении
