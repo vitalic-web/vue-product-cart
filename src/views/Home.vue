@@ -1,112 +1,105 @@
 <template>
   <div class="home">
-    {{ preloader }}
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld :msg="message" @msg-updated="onChangeMessage" />
-    <button type="button" @click="changeMessage">change Message</button>
-    viewportW: {{ viewportW }} {{ viewportWidthInPx }} {{ allCups }}
-
-    <div v-if="isDesktop" class="desktop">desktop</div>
-    <div v-else class="mobile">mobile</div>
-
-    <button type="button" @click="changeUserName">changeUserName</button>
-    <button type="button" @click="getData">getData</button>
-    {{ bar.foo && bar.foo.s }}
-    <li v-for="user in users" :key="user.id">{{ user.name }}</li>
-    <li v-for="post in posts" :key="post.id">{{ post }}</li>
+    <ul>
+      <li v-for="product in products" :key="product.id">{{product.name}}: {{product.price}}</li>
+    </ul>
+    <label>
+      Name:
+      <input type="text" v-model="productModel.name.value" />
+      <span v-if="productModel.name.error">{{ productModel.name.error }}</span>
+    </label>
+    <br />
+    <label>
+      Price:
+      <input type="text" v-model="productModel.price.value" />
+      <span v-if="productModel.price.error">{{ productModel.price.error }}</span>
+    </label>
+    <br />
+    <button @click="addProduct">Add product</button>
+    <button @click="updateId2">updateId2</button>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import axios from 'axios'
+import Vue from 'vue'
 
 export default {
   name: 'Home',
-  components: {
-    HelloWorld
-  },
   data () {
     return {
-      message: 'Привет Vue!',
-      viewportW: 0,
-      cup: 2,
-      guest: 3,
-      arr: [
-        1,
-        2
-      ],
-      users: [],
-      posts: [],
       preloader: false,
-      bar: {
-        d: 'test'
-      }
-    }
-  },
-  computed: {
-    viewportWidthInPx (oldV, newV) {
-      console.log(oldV, newV)
-      return `${this.viewportW}px`
-    },
-    isDesktop () {
-      return this.viewportW > 800
-    },
-
-    allCups () {
-      return this.cup * this.guest
+      products: {},
+      productModel: {
+        name: {
+          value: '',
+          error: null
+        },
+        price: {
+          value: '',
+          error: null
+        }
+      },
+      productAddErrors: []
     }
   },
   created () {
     this.getData()
-  },
-  mounted () {
-    this.$nextTick(() => {
-      console.log('1')
-    })
-    console.log('2')
-
-    this.onResize()
-
-    window.addEventListener('resize', this.onResize)
-  },
-  beforeDestroy () {
-    console.log('destroy')
-
-    window.removeEventListener('resize', this.onResize)
   },
   methods: {
     async getData () {
       this.preloader = true
 
       Promise.all([
-        fetch('/static/users.json')
-          .then(response => response.json()),
-        fetch('https://jsonplaceholder.typicode.com/users')
+        fetch('/products')
           .then(response => response.json())
-      ]).then(([posts, users]) => {
-        this.posts = posts
-        this.users = users
-        this.preloader = false
+      ])
+        .then(([products]) => {
+          this.products = products
+          this.preloader = false
+        })
+    },
+
+    addProduct () {
+      const productNetModel = {
+        name: this.productModel.name.value,
+        price: this.productModel.price.value
+      }
+      axios.post('/products', productNetModel)
+        .then((response) => {
+          Vue.set(this.products, response.data.id, response.data)
+          this.resetErrors()
+        })
+        .catch((error) => {
+          this.resetErrors()
+          error.response.data.forEach(err => {
+            this.productModel[err.field].error = err.message
+          })
+        })
+    },
+
+    resetErrors () {
+      Object.keys(this.productModel).forEach(key => {
+        this.productModel[key].error = null
       })
     },
 
-    changeUserName () {
-      this.users[0].name = 'John Dou'
-    },
-
-    changeMessage (ev) {
-      console.log(ev)
-      this.message = `${this.message} - ${this.message};`
-    },
-
-    onChangeMessage (data) {
-      this.message = data
-    },
-
-    onResize () {
-      this.viewportW = document.documentElement.clientWidth
-      console.log(this.arr)
+    updateId2 () {
+      axios.put('/products/2', {
+        name: 'Pen1',
+        price: '41'
+      })
+        .then((response) => {
+          Vue.set(this.products, response.data.id, response.data)
+          this.resetErrors()
+        })
+        .catch((error) => {
+          this.resetErrors()
+          error.response.data.forEach(err => {
+            this.productModel[err.field].error = err.message
+          })
+        })
     }
   }
 }

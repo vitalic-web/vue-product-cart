@@ -46,6 +46,16 @@ class Db {
     return this
   }
 
+  update (entry) {
+    if (!this.__id) {
+      console.warn('Ошибка составления запроса к данным. Отсутствует идентификатор')
+    }
+    const entryId = Object.keys(this.__entries[this.__entryName]).length + 1
+    this.__set = { id: this.__id, ...entry }
+    this.__entries[this.__entryName][entryId] = { ...this.__set }
+    return this
+  }
+
   toArray () {
     if (this.__id) {
       console.warn('Ошибка составления запроса к данным. Одиночная запись не может быть массивом')
