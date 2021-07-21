@@ -180,7 +180,6 @@ export default {
     },
 
     openPopup (evt) {
-      console.log(evt.target)
       this.id = evt.target.dataset.product_id
       this.selectedName = evt.target.dataset.name
       this.selectedPrice = evt.target.dataset.price
@@ -196,7 +195,6 @@ export default {
 
 <style>
 .cart-container {
-  border: 1px solid red;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -233,7 +231,6 @@ export default {
 }
 
 .add-product-container {
-  border: 1px solid red;
   margin: 20px 0 0;
   padding: 5px 0;
   display: flex;
