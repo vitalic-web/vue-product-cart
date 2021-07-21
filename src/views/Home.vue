@@ -10,13 +10,54 @@
           <span class="cart__product-name">{{product.name}}:</span> {{product.price}}
           <button
             class="cart__product-edit"
+            :data-name="product.name"
+            :data-price="product.price"
             :data-product_id="product.id"
             type="button"
-            @click="getID"
+            @click="openPopup"
           >edit</button>
         </li>
       </ul>
-      <Popup :update="updateProduct" />
+
+      <!-- <Popup
+        :update="updateProduct"
+        :isClosePopup="isClosePopup"
+        :currentName="selectedName"
+        :currentPrice="selectedPrice"
+      /> -->
+
+      <div class="popup" :class="{ popup_hidden: isClosePopup }">
+        <p class="popup__title">Enter new data</p>
+        <label class="edit-product__label">
+          Name:
+          <input
+            class="edit-product__input"
+            type="text"
+            v-model="selectedName"
+            placeholder="Enter product name"
+          />
+        </label>
+        <label class="edit-product__label">
+          Price:
+          <input
+            class="edit-product__input"
+            type="text"
+            v-model="selectedPrice"
+            placeholder="Enter product name"
+          />
+        </label>
+        <button
+          class="edit-product__btn"
+          type="button"
+          @click="updateProduct"
+        >Update</button>
+        <button
+          class="edit-product__close-btn"
+          type="button"
+          @click="closePopup"
+        >x</button>
+      </div>
+
     </div>
     <div class="add-product-container">
       <h4 class="cart__title">Add product</h4>
@@ -51,13 +92,13 @@
 // @ is an alias to /src
 import axios from 'axios'
 import Vue from 'vue'
-import Popup from '@/components/Popup.vue'
+// import Popup from '@/components/Popup.vue'
 
 export default {
   name: 'Home',
-  components: {
-    Popup
-  },
+  // components: {
+  //   Popup
+  // },
   data () {
     return {
       preloader: false,
@@ -73,7 +114,10 @@ export default {
         }
       },
       productAddErrors: [],
-      id: null
+      id: null,
+      isClosePopup: true,
+      selectedName: '',
+      selectedPrice: ''
     }
   },
   created () {
@@ -117,19 +161,15 @@ export default {
       })
     },
 
-    getID (evt) {
-      console.log(evt.target.dataset.product_id)
-      this.id = evt.target.dataset.product_id
-    },
-
-    updateProduct (name, price) {
+    updateProduct () {
       axios.put(`/products/${this.id}`, {
-        name,
-        price
+        name: this.selectedName,
+        price: this.selectedPrice
       })
         .then((response) => {
           Vue.set(this.products, response.data.id, response.data)
           this.resetErrors()
+          this.isClosePopup = true
         })
         .catch((error) => {
           this.resetErrors()
@@ -137,6 +177,18 @@ export default {
             this.productModel[err.field].error = err.message
           })
         })
+    },
+
+    openPopup (evt) {
+      console.log(evt.target)
+      this.id = evt.target.dataset.product_id
+      this.selectedName = evt.target.dataset.name
+      this.selectedPrice = evt.target.dataset.price
+      this.isClosePopup = false
+    },
+
+    closePopup () {
+      this.isClosePopup = true
     }
   }
 }
@@ -213,5 +265,57 @@ export default {
 
 .add-product__btn {
   margin: 10px 0 0 0;
+}
+
+.popup {
+  border: 1px solid black;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 5px;
+  position: absolute;
+  right: 181px;
+  top: 36px;
+}
+
+.popup.popup_hidden {
+  display: none;
+}
+
+.popup__title {
+  margin: 0 0 5px;
+}
+
+.edit-product__label {
+  display: flex;
+  width: 176px;
+  justify-content: space-between;
+}
+
+.edit-product__label:first-of-type {
+  margin: 0 0 10px;
+}
+
+.edit-product__input {
+  width: 116px;
+}
+
+.edit-product__btn {
+  margin: 10px 0 0 0;
+}
+
+.edit-product__close-btn {
+  position: absolute;
+  right: -24px;
+  top: -27px;
+  background: none;
+  outline: none;
+  border: none;
+  font-size: 25px;
+}
+
+.edit-product__close-btn:hover {
+  cursor: pointer;
 }
 </style>

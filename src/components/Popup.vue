@@ -1,5 +1,8 @@
 <template>
-  <div class="popup">
+  <div
+    class="popup"
+    :class="{ popup_hidden: isClosePopup }"
+  >
     <p class="popup__title">Enter new data</p>
     <label class="edit-product__label">
       Name:
@@ -28,6 +31,7 @@
       class="edit-product__close-btn"
       type="button"
     >x</button>
+    <button @click="log">log</button>
   </div>
 </template>
 
@@ -36,16 +40,28 @@ export default {
   name: 'Popup',
   data () {
     return {
-      inputName: 'qqqq',
-      inputPrice: 1111
+      inputName: this.currentName,
+      inputPrice: this.currentPrice
     }
   },
   props: {
-    update: Function
+    update: Function,
+    isClosePopup: Boolean,
+    currentName: String,
+    currentPrice: String
   },
   methods: {
     updateProduct () {
       this.update(this.inputName, this.inputPrice)
+    },
+
+    log () {
+      console.log('this.inputName', this.inputName)
+      console.log('this.inputPrice', this.inputPrice)
+      console.log('this.currentName', this.currentName)
+      console.log('this.currentPrice', this.currentPrice)
+      console.log('this.inputName', this.inputName)
+      console.log('this.inputPrice', this.inputPrice)
     }
   }
 }
@@ -62,6 +78,10 @@ export default {
   position: absolute;
   right: 181px;
   top: 36px;
+}
+
+.popup.popup_hidden {
+  display: none;
 }
 
 .popup__title {
