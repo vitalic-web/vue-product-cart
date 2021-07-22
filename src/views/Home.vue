@@ -19,44 +19,13 @@
         </li>
       </ul>
 
-      <!-- <Popup
+      <Popup
+        v-if="isOpenPopup"
         :update="updateProduct"
-        :isClosePopup="isClosePopup"
         :currentName="selectedName"
         :currentPrice="selectedPrice"
-      /> -->
-
-      <div class="popup" :class="{ popup_hidden: isClosePopup }">
-        <p class="popup__title">Enter new data</p>
-        <label class="edit-product__label">
-          Name:
-          <input
-            class="edit-product__input"
-            type="text"
-            v-model="selectedName"
-            placeholder="Enter product name"
-          />
-        </label>
-        <label class="edit-product__label">
-          Price:
-          <input
-            class="edit-product__input"
-            type="text"
-            v-model="selectedPrice"
-            placeholder="Enter product name"
-          />
-        </label>
-        <button
-          class="edit-product__btn"
-          type="button"
-          @click="updateProduct"
-        >Update</button>
-        <button
-          class="edit-product__close-btn"
-          type="button"
-          @click="closePopup"
-        >x</button>
-      </div>
+        :closePopup="closePopup"
+      />
 
     </div>
     <div class="add-product-container">
@@ -89,16 +58,15 @@
 </template>
 
 <script>
-// @ is an alias to /src
 import axios from 'axios'
 import Vue from 'vue'
-// import Popup from '@/components/Popup.vue'
+import Popup from '@/components/Popup.vue'
 
 export default {
   name: 'Home',
-  // components: {
-  //   Popup
-  // },
+  components: {
+    Popup
+  },
   data () {
     return {
       preloader: false,
@@ -115,7 +83,7 @@ export default {
       },
       productAddErrors: [],
       id: null,
-      isClosePopup: true,
+      isOpenPopup: false,
       selectedName: '',
       selectedPrice: ''
     }
@@ -161,15 +129,15 @@ export default {
       })
     },
 
-    updateProduct () {
+    updateProduct (name, price) {
       axios.put(`/products/${this.id}`, {
-        name: this.selectedName,
-        price: this.selectedPrice
+        name,
+        price
       })
         .then((response) => {
           Vue.set(this.products, response.data.id, response.data)
           this.resetErrors()
-          this.isClosePopup = true
+          this.isOpenPopup = false
         })
         .catch((error) => {
           this.resetErrors()
@@ -183,11 +151,11 @@ export default {
       this.id = evt.target.dataset.product_id
       this.selectedName = evt.target.dataset.name
       this.selectedPrice = evt.target.dataset.price
-      this.isClosePopup = false
+      this.isOpenPopup = true
     },
 
     closePopup () {
-      this.isClosePopup = true
+      this.isOpenPopup = false
     }
   }
 }

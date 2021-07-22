@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="popup"
-    :class="{ popup_hidden: isClosePopup }"
-  >
+  <div class="popup">
     <p class="popup__title">Enter new data</p>
     <label class="edit-product__label">
       Name:
@@ -19,7 +16,7 @@
         class="edit-product__input"
         type="text"
         v-model="inputPrice"
-        placeholder="Enter product name"
+        placeholder="Enter product price"
       />
     </label>
     <button
@@ -30,8 +27,8 @@
     <button
       class="edit-product__close-btn"
       type="button"
+      @click="closePopup"
     >x</button>
-    <button @click="log">log</button>
   </div>
 </template>
 
@@ -46,22 +43,13 @@ export default {
   },
   props: {
     update: Function,
-    isClosePopup: Boolean,
+    closePopup: Function,
     currentName: String,
     currentPrice: String
   },
   methods: {
     updateProduct () {
       this.update(this.inputName, this.inputPrice)
-    },
-
-    log () {
-      console.log('this.inputName', this.inputName)
-      console.log('this.inputPrice', this.inputPrice)
-      console.log('this.currentName', this.currentName)
-      console.log('this.currentPrice', this.currentPrice)
-      console.log('this.inputName', this.inputName)
-      console.log('this.inputPrice', this.inputPrice)
     }
   }
 }
