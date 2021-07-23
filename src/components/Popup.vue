@@ -64,12 +64,8 @@ export default {
   align-items: center;
   padding: 5px;
   position: absolute;
-  right: 181px;
-  top: 36px;
-}
-
-.popup.popup_hidden {
-  display: none;
+  right: -202px;
+  top: -1px;
 }
 
 .popup__title {
