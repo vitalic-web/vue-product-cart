@@ -17,16 +17,14 @@
             @click="openPopup"
           >edit</button>
         </li>
+        <Popup
+          v-if="isOpenPopup"
+          :update="updateProduct"
+          :currentName="selectedName"
+          :currentPrice="selectedPrice"
+          :closePopup="closePopup"
+        />
       </ul>
-
-      <Popup
-        v-if="isOpenPopup"
-        :update="updateProduct"
-        :currentName="selectedName"
-        :currentPrice="selectedPrice"
-        :closePopup="closePopup"
-      />
-
     </div>
     <div class="add-product-container">
       <h4 class="cart__title">Add product</h4>
@@ -135,9 +133,10 @@ export default {
         price
       })
         .then((response) => {
-          Vue.set(this.products, response.data.id, response.data)
+          // Vue.set(this.products, response.data.id, response.data)
           this.resetErrors()
           this.isOpenPopup = false
+          this.getData()
         })
         .catch((error) => {
           this.resetErrors()
@@ -178,6 +177,7 @@ export default {
   align-items: center;
   padding: 10px;
   margin: 0;
+  position: relative;
 }
 
 .cart__title {
@@ -230,57 +230,5 @@ export default {
 
 .add-product__btn {
   margin: 10px 0 0 0;
-}
-
-.popup {
-  border: 1px solid black;
-  border-radius: 5px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 5px;
-  position: absolute;
-  right: 181px;
-  top: 36px;
-}
-
-.popup.popup_hidden {
-  display: none;
-}
-
-.popup__title {
-  margin: 0 0 5px;
-}
-
-.edit-product__label {
-  display: flex;
-  width: 176px;
-  justify-content: space-between;
-}
-
-.edit-product__label:first-of-type {
-  margin: 0 0 10px;
-}
-
-.edit-product__input {
-  width: 116px;
-}
-
-.edit-product__btn {
-  margin: 10px 0 0 0;
-}
-
-.edit-product__close-btn {
-  position: absolute;
-  right: -24px;
-  top: -27px;
-  background: none;
-  outline: none;
-  border: none;
-  font-size: 25px;
-}
-
-.edit-product__close-btn:hover {
-  cursor: pointer;
 }
 </style>
