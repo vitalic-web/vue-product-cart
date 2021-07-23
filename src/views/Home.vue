@@ -1,5 +1,8 @@
 <template>
   <div class="home">
+    <Table :usersDataTable="fullTableData" :tableName="usersInfo"/>
+    <Table :usersDataTable="products" :tableName="name"/>
+
     <div class="cart-container">
       <h3 class="cart__title">Product cart</h3>
       <ul class="cart">
@@ -59,11 +62,14 @@
 import axios from 'axios'
 import Vue from 'vue'
 import Popup from '@/components/Popup.vue'
+import Table from '@/components/Table/Table.vue'
+import transformData from '@/components/Table/utils/transformData'
 
 export default {
   name: 'Home',
   components: {
-    Popup
+    Popup,
+    Table
   },
   data () {
     return {
@@ -83,12 +89,32 @@ export default {
       id: null,
       isOpenPopup: false,
       selectedName: '',
-      selectedPrice: ''
+      selectedPrice: '',
+      tableData: [],
+      usersInfo: 'Users Info',
+      name: 'Product Cart'
     }
+  },
+  computed: {
+    fullTableData () {
+      return transformData(this.tableData)
+    }
+    // cartData() {
+    //   return this.getData()
+    // }
   },
   created () {
     this.getData()
+
+    axios
+      .get('https://mocki.io/v1/34307c00-66b6-4d8f-a1c2-89979dbabdf7')
+      .then((response) => (this.tableData = response.data))
+
+    // console.log('this.products in created', this.products);
   },
+  // mounted () {
+  //   console.log('this.products in mounted', this.products);
+  // },
   methods: {
     async getData () {
       this.preloader = true
