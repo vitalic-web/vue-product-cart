@@ -69,31 +69,31 @@
 </template>
 
 <script>
-import axios from 'axios'
-import Vue from 'vue'
+import axios from 'axios';
+import Vue from 'vue';
 // import Popup from '@/components/Popup.vue'
-import Table from '@/components/Table/Table.vue'
-import transformData from '@/components/Table/utils/transformData'
+import Table from '@/components/Table/Table.vue';
+import transformData from '@/components/Table/utils/transformData';
 
 export default {
   name: 'Home',
   components: {
     // Popup,
-    Table
+    Table,
   },
-  data () {
+  data() {
     return {
       preloader: false,
       products: {},
       productModel: {
         name: {
           value: '',
-          error: null
+          error: null,
         },
         price: {
           value: '',
-          error: null
-        }
+          error: null,
+        },
       },
       productAddErrors: [],
       id: null,
@@ -102,90 +102,91 @@ export default {
       selectedPrice: '',
       tableData: [],
       usersInfo: 'Users Info',
-      name: 'Product Cart'
-    }
+      name: 'Product Cart',
+    };
   },
   computed: {
-    fullTableData () {
-      return transformData(this.tableData)
-    }
+    fullTableData() {
+      return transformData(this.tableData);
+    },
   },
-  created () {
-    this.getData()
+  created() {
+    this.getData();
 
     axios
       .get('https://mocki.io/v1/34307c00-66b6-4d8f-a1c2-89979dbabdf7')
-      .then((response) => (this.tableData = response.data))
+      // eslint-disable-next-line no-return-assign
+      .then((response) => (this.tableData = response.data));
   },
   methods: {
-    async getData () {
-      this.preloader = true
+    async getData() {
+      this.preloader = true;
 
       Promise.all([
         fetch('/products')
-          .then(response => response.json())
+          .then((response) => response.json()),
       ])
         .then(([products]) => {
-          this.products = products
-          this.preloader = false
-        })
+          this.products = products;
+          this.preloader = false;
+        });
     },
 
-    addProduct () {
+    addProduct() {
       const productNetModel = {
         name: this.productModel.name.value,
-        price: this.productModel.price.value
-      }
+        price: this.productModel.price.value,
+      };
       axios.post('/products', productNetModel)
         .then((response) => {
-          Vue.set(this.products, response.data.id, response.data)
-          this.resetErrors()
+          Vue.set(this.products, response.data.id, response.data);
+          this.resetErrors();
         })
         .catch((error) => {
-          this.resetErrors()
-          error.response.data.forEach(err => {
-            this.productModel[err.field].error = err.message
-          })
-        })
+          this.resetErrors();
+          error.response.data.forEach((err) => {
+            this.productModel[err.field].error = err.message;
+          });
+        });
     },
 
-    resetErrors () {
-      Object.keys(this.productModel).forEach(key => {
-        this.productModel[key].error = null
-      })
+    resetErrors() {
+      Object.keys(this.productModel).forEach((key) => {
+        this.productModel[key].error = null;
+      });
     },
 
-    updateProduct (name, price) {
+    updateProduct(name, price) {
       axios.put(`/products/${this.id}`, {
         name,
-        price
+        price,
       })
-        .then((response) => {
+        .then(() => {
           // Vue.set(this.products, response.data.id, response.data)
-          this.resetErrors()
-          this.isOpenPopup = false
-          this.getData()
+          this.resetErrors();
+          this.isOpenPopup = false;
+          this.getData();
         })
         .catch((error) => {
-          this.resetErrors()
-          error.response.data.forEach(err => {
-            this.productModel[err.field].error = err.message
-          })
-        })
+          this.resetErrors();
+          error.response.data.forEach((err) => {
+            this.productModel[err.field].error = err.message;
+          });
+        });
     },
 
-    openPopup (evt) {
-      this.id = evt.target.dataset.product_id
-      this.selectedName = evt.target.dataset.name
-      this.selectedPrice = evt.target.dataset.price
-      this.isOpenPopup = true
+    openPopup(evt) {
+      this.id = evt.target.dataset.product_id;
+      this.selectedName = evt.target.dataset.name;
+      this.selectedPrice = evt.target.dataset.price;
+      this.isOpenPopup = true;
     },
 
-    closePopup () {
-      this.isOpenPopup = false
-    }
-  }
-}
+    closePopup() {
+      this.isOpenPopup = false;
+    },
+  },
+};
 </script>
 
 <style>

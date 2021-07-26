@@ -35,25 +35,25 @@
 <script>
 export default {
   name: 'Popup',
-  data () {
+  data() {
     return {
       inputName: this.currentName,
-      inputPrice: this.currentPrice
-    }
+      inputPrice: this.currentPrice,
+    };
   },
   props: {
     update: Function,
     closePopup: Function,
     currentName: String,
     currentPrice: String,
-    isProductCart: Boolean
+    isProductCart: Boolean,
   },
   methods: {
-    updateProduct () {
-      this.update(this.inputName, this.inputPrice)
-    }
-  }
-}
+    updateProduct() {
+      this.update(this.inputName, this.inputPrice);
+    },
+  },
+};
 </script>
 
 <style>

@@ -45,67 +45,65 @@
 </template>
 
 <script>
-import TableHead from '@/components/Table/TableHead.vue'
-import TableRow from '@/components/Table/TableRow.vue'
-import sortMethods from '@/components/Table/utils/sortMethods'
-import sortData from '@/components/Table/utils/sortData'
-import getTitles from '@/components/Table/utils/getTitles'
+import TableHead from '@/components/Table/TableHead.vue';
+import TableRow from '@/components/Table/TableRow.vue';
+import sortMethods from '@/components/Table/utils/sortMethods';
+import sortData from '@/components/Table/utils/sortData';
+import getTitles from '@/components/Table/utils/getTitles';
 
 export default {
   name: 'Table',
   components: {
     TableHead,
-    TableRow
+    TableRow,
   },
   props: [
     'usersDataTable', 'tableName', 'isProductCart', 'isOpenPopup', 'update',
-    'currentName', 'currentPrice', 'closePopup', 'openPopup'
+    'currentName', 'currentPrice', 'closePopup', 'openPopup',
   ],
-  data () {
+  data() {
     return {
       isAscending: true,
       currentSortName: '',
       inputValue: '',
-      isSorted: false
-    }
+      isSorted: false,
+    };
   },
   computed: {
-    tableTitles () {
-      return getTitles(this.usersDataTable)
+    tableTitles() {
+      return getTitles(this.usersDataTable);
     },
-    filteredData () {
+    filteredData() {
       if (!this.inputValue) {
-        return this.usersDataTable
-      } return sortMethods.search(this.usersDataTable, this.inputValue)
+        return this.usersDataTable;
+      } return sortMethods.search(this.usersDataTable, this.inputValue);
     },
-    sortedData () {
+    sortedData() {
       if (this.isSorted) {
-        return sortData(this.currentSortName, this.filteredData, this.isAscending)
-      } return sortData('', this.filteredData, this.isAscending)
+        return sortData(this.currentSortName, this.filteredData, this.isAscending);
+      } return sortData('', this.filteredData, this.isAscending);
     },
-    isData () {
+    isData() {
       if (Array.isArray(this.filteredData)) {
-        return !this.filteredData.length
-      } else {
-        return !this.filteredData[1]
-      }
-    }
+        return !this.filteredData.length;
+      } return !this.filteredData[1];
+    },
   },
   methods: {
-    sortData (evt) {
-      this.currentSortName = evt.target.dataset.column
-      this.isAscending = !this.isAscending
-      this.isSorted = true
+    sortData(evt) {
+      this.currentSortName = evt.target.dataset.column;
+      this.isAscending = !this.isAscending;
+      this.isSorted = true;
     },
-    getInputValue (evt) {
-      this.inputValue = evt.target.value
+    getInputValue(evt) {
+      this.inputValue = evt.target.value;
     },
-    clearSearch () {
-      this.inputValue = ''
-      this.isSorted = false
-    }
-  }
-}
+    clearSearch() {
+      this.inputValue = '';
+      this.isSorted = false;
+    },
+  },
+};
 </script>
 
 <style>

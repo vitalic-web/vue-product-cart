@@ -19,20 +19,15 @@
 </template>
 
 <script>
-import SortSymbol from '@/components/Table/SortSymbol.vue'
+import SortSymbol from '@/components/Table/SortSymbol.vue';
 
 export default {
   name: 'TableHead',
   components: {
-    SortSymbol
+    SortSymbol,
   },
   props: ['tableTitles', 'sortData', 'isAscending', 'isSorted', 'currentSortName', 'isProductCart'],
-  methods: {
-    log () {
-      console.log(this.currentSortName)
-    }
-  }
-}
+};
 </script>
 
 <style>

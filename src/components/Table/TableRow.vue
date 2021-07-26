@@ -25,21 +25,22 @@
 </template>
 
 <script>
-import convertObj from '@/components/Table/utils/convertObj'
-import Popup from '@/components/Popup'
+import convertObj from '@/components/Table/utils/convertObj';
+// eslint-disable-next-line import/extensions
+import Popup from '@/components/Popup';
 
 export default {
   name: 'TableRow',
   components: {
-    Popup
+    Popup,
   },
   props: ['row', 'isProductCart', 'isOpenPopup', 'update', 'currentName', 'currentPrice', 'closePopup', 'openPopup'],
   computed: {
-    rowData () {
-      return convertObj(this.row)
-    }
-  }
-}
+    rowData() {
+      return convertObj(this.row);
+    },
+  },
+};
 </script>
 
 <style>

@@ -1,10 +1,10 @@
-import sortMethods from './sortMethods'
+import sortMethods from './sortMethods';
 
-export default function sortData (sortName, data, isAscending) {
+export default function sortData(sortName, data, isAscending) {
   switch (sortName) {
     case 'birthday':
-      return sortMethods.sortDate(data, isAscending)
+      return sortMethods.sortDate(data, isAscending);
     default:
-      return sortMethods.sort(data, isAscending, sortName)
+      return sortMethods.sort(data, isAscending, sortName);
   }
 }

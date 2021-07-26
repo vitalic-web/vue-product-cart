@@ -19,14 +19,14 @@ export default {
   props: {
     isAscending: Boolean,
     currentSortName: String,
-    currentTitle: String
+    currentTitle: String,
   },
   computed: {
-    isCurrentColumn () {
-      return this.currentSortName === this.currentTitle
-    }
-  }
-}
+    isCurrentColumn() {
+      return this.currentSortName === this.currentTitle;
+    },
+  },
+};
 </script>
 
 <style>
