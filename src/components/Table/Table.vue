@@ -40,7 +40,7 @@
     /> -->
   </table>
   <p v-if="!filteredData.length">Nothing found. Please enter a valid request.</p>
-  <!-- <button type="button" @click="log">logData</button> -->
+  <button type="button" @click="log">logData</button>
 </div>
 </template>
 
@@ -95,6 +95,7 @@ export default {
   methods: {
     sortData (evt) {
       this.currentSortName = evt.target.dataset.column
+      // console.log('evt.target.dataset.column', evt.target.dataset.column)
       this.isAscending = !this.isAscending
       this.isSorted = true
     },
@@ -106,8 +107,8 @@ export default {
       this.isSorted = false
     },
     log () {
-      console.log('this.usersDataTable', this.usersDataTable)
-      console.log('this.tableTitles', this.tableTitles)
+      console.log('this.filteredData', this.filteredData)
+      console.log('this.sortedData', this.sortedData)
     }
   }
 }
@@ -120,6 +121,7 @@ export default {
   flex-direction: column;
   align-items: center;
   position: relative;
+  margin: 0 0 20px;
 }
 
 .table {

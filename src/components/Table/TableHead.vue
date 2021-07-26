@@ -10,7 +10,7 @@
         <SortSymbol
           v-if="isSorted"
           :isAscending="isAscending"
-          :isCurrentColumn="isCurrentColumn.userName"
+          :isCurrentColumn="isCurrentColumn[title]"
           :currentSortName="currentSortName"
         />
     </th>
@@ -106,7 +106,7 @@ export default {
   computed: {
     isCurrentColumn () {
       return {
-        userName: this.isSorted && this.currentSortName === 'userName',
+        username: this.isSorted && this.currentSortName === 'username',
         phone: this.isSorted && this.currentSortName === 'phone',
         email: this.currentSortName === 'email',
         name: this.currentSortName === 'name',

@@ -24,8 +24,8 @@ export default function transformData (usersData) {
   usersData.forEach((item) => {
     const el = {
       username: item.username,
-      phone: item.phone,
-      email: item.email,
+      phone: item.phone ? item.phone : '',
+      email: item.email ? item.email : '',
       person: {
         name: item.person.name,
         surname: item.person.surname,
