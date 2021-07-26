@@ -18,8 +18,13 @@ export default {
   name: 'SortSymbol',
   props: {
     isAscending: Boolean,
-    isCurrentColumn: Boolean,
-    currentSortName: String
+    currentSortName: String,
+    currentTitle: String
+  },
+  computed: {
+    isCurrentColumn () {
+      return this.currentSortName === this.currentTitle
+    }
   }
 }
 </script>

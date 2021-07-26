@@ -1,5 +1,5 @@
 <template>
-  <div class="popup">
+  <div class="popup" :class="{ popupProduct: isProductCart }">
     <p class="popup__title">Enter new data</p>
     <label class="edit-product__label">
       Name:
@@ -45,7 +45,8 @@ export default {
     update: Function,
     closePopup: Function,
     currentName: String,
-    currentPrice: String
+    currentPrice: String,
+    isProductCart: Boolean
   },
   methods: {
     updateProduct () {
@@ -66,6 +67,10 @@ export default {
   position: absolute;
   right: -202px;
   top: -1px;
+}
+
+.popup.popupProduct {
+  top: 40px;
 }
 
 .popup__title {

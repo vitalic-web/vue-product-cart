@@ -1,5 +1,8 @@
 <template>
-<div class="table-container">
+<div
+  class="table-container"
+  :class="{ tableCart: isProductCart }"
+  >
   <div class="table__search-container">
     <button
       v-if="isSorted"
@@ -23,31 +26,27 @@
       :isAscending="isAscending"
       :isSorted="isSorted"
       :currentSortName="currentSortName"
+      :isProductCart="isProductCart"
     />
     <TableRow v-for="(row, index) in sortedData"
       :key="index"
       :row="row"
+      :isProductCart="isProductCart"
+      :isOpenPopup="isOpenPopup"
+      :update="update"
+      :currentName="currentName"
+      :currentPrice="currentPrice"
+      :closePopup="closePopup"
+      :openPopup="openPopup"
     />
-    <!-- <TableRow v-for="row in sortedData"
-      :key="row.name"
-      :userName="row.username"
-      :phone="row.phone"
-      :email="row.email"
-      :name="row.person.name"
-      :surname="row.person.surname"
-      :birthday="row.person.birthday"
-      :age="row.person.age"
-    /> -->
   </table>
-  <p v-if="!filteredData.length">Nothing found. Please enter a valid request.</p>
-  <button type="button" @click="log">logData</button>
+  <p v-if="isData">Nothing found. Please enter a valid request.</p>
 </div>
 </template>
 
 <script>
 import TableHead from '@/components/Table/TableHead.vue'
 import TableRow from '@/components/Table/TableRow.vue'
-// import { tableNames } from '@/components/Table/common/constants'
 import sortMethods from '@/components/Table/utils/sortMethods'
 import sortData from '@/components/Table/utils/sortData'
 import getTitles from '@/components/Table/utils/getTitles'
@@ -58,13 +57,12 @@ export default {
     TableHead,
     TableRow
   },
-  // props: {
-  //   usersDataTable: Object,
-  // },
-  props: ['usersDataTable', 'tableName'],
+  props: [
+    'usersDataTable', 'tableName', 'isProductCart', 'isOpenPopup', 'update',
+    'currentName', 'currentPrice', 'closePopup', 'openPopup'
+  ],
   data () {
     return {
-      // tableNames,
       isAscending: true,
       currentSortName: '',
       inputValue: '',
@@ -84,18 +82,18 @@ export default {
       if (this.isSorted) {
         return sortData(this.currentSortName, this.filteredData, this.isAscending)
       } return sortData('', this.filteredData, this.isAscending)
+    },
+    isData () {
+      if (Array.isArray(this.filteredData)) {
+        return !this.filteredData.length
+      } else {
+        return !this.filteredData[1]
+      }
     }
   },
-  // created () {
-  //   console.log('created in Table log this.usersDataTable', this.usersDataTable);
-  // },
-  // mounted () {
-  //   console.log('mounted in Table log this.usersDataTable', this.usersDataTable);
-  // },
   methods: {
     sortData (evt) {
       this.currentSortName = evt.target.dataset.column
-      // console.log('evt.target.dataset.column', evt.target.dataset.column)
       this.isAscending = !this.isAscending
       this.isSorted = true
     },
@@ -105,10 +103,6 @@ export default {
     clearSearch () {
       this.inputValue = ''
       this.isSorted = false
-    },
-    log () {
-      console.log('this.filteredData', this.filteredData)
-      console.log('this.sortedData', this.sortedData)
     }
   }
 }
@@ -122,6 +116,10 @@ export default {
   align-items: center;
   position: relative;
   margin: 0 0 20px;
+}
+
+.table-container.tableCart {
+  width: 60%;
 }
 
 .table {
